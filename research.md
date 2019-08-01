@@ -41,7 +41,13 @@ Ethereum mining software includes the following:
 
 Claymore [supports both](https://github.com/Claymore-Dual/Claymore-Dual-Miner) NVIDIA and AMD GPUs (OpenCL and CUDA).
 
+Claymore charges a [1% developer fee](https://github.com/Claymore-Dual/Claymore-Dual-Miner) for ETH mining, which [reportedly increases](https://www.reddit.com/r/EtherMining/wiki/software/apps) with dual mining other currencies.
+
 ### ETHminer
+
+Ethminer originates from `cpp-ethereum` which became [Aleth](https://github.com/ethereum/aleth), a C++ Ethereum client. Ethminer started after `cpp-ethereum` discontinued its GPU mining functionality.
+
+
 
 Ethminer [supports both](https://github.com/ethereum-mining/ethminer) NVIDIA and AMD GPUs (OpenCL and CUDA).
 
