@@ -1,23 +1,6 @@
-# Pantheon GPU Miner Research
+# Pantheon GPU Miner Research Documentation
 
-## Description
-
- Upgrade Pantheon's mining capabilities to include GPU mining.
-
-## Research Criteria
-
-The research should:
-1. Identify mining software to be supported
-2. Identify Protocols to be supported
-3. Implementation instructions of those protocols
-
-
-## Research Procedure
-
-
-## Research Documentation
-
-### Current Pantheon Releases
+## Current Pantheon Releases
 
 Currently, Pantheon [offers binaries](https://docs.pantheon.pegasys.tech/en/latest/Installation/Install-Binaries/) for Windows, MacOS, and Linux. As such, it would be ideal for a GPU miner integration to include compatibility across these three operating systems.
 
@@ -44,13 +27,47 @@ rpc-http-enabled=true
 data-path="/tmp/tmpdata-path"
 ```
 
-### Mining Software
+## Mining Software
 
 
 Ethereum mining software includes the following:
 
 - [ETHminer](https://github.com/ethereum-mining/ethminer)
 - [Claymore](https://github.com/Claymore-Dual/Claymore-Dual-Miner)
-- [CGMiner]()
-- [WinETH]()
-- [Minergate]()
+- [Qtminer](https://github.com/etherchain-org/qtminer)
+- [Mingergate's Miner](https://minergate.com/downloads)
+
+### Claymore
+
+Claymore [supports both](https://github.com/Claymore-Dual/Claymore-Dual-Miner) NVIDIA and AMD GPUs (OpenCL and CUDA).
+
+### ETHminer
+
+Ethminer [supports both](https://github.com/ethereum-mining/ethminer) NVIDIA and AMD GPUs (OpenCL and CUDA).
+
+
+### Qtminer
+
+Qtminer's repo [describes the project as](https://github.com/etherchain-org/qtminer) a Stratum enabled Ethereum miner, however lacks sufficient documentation.
+
+A [good number of users](https://www.reddit.com/r/EtherMining/search/?q=qtminer&restrict_sr=1)
+have used Qtminer in the past, however these recorded cases exceed a year ago, while [Claymore](https://www.reddit.com/r/EtherMining/search/?q=claymore&restrict_sr=1) and [Ethminer engagements](https://www.reddit.com/r/EtherMining/search/?q=ethminer&restrict_sr=1) have been more recent.
+
+[Qtminer's Github repo](https://github.com/etherchain-org/qtminer/commits/master) indicates only 4 commits to the project, all in the year 2015, indicating no ongoing or recent development or developer interest in the project.
+
+This miner should not be pursued for this project.
+
+### Minergate
+
+Minergate [has support for](https://minergate.com/downloads) both Windows, Linux, and MacOS.
+
+## API protocols
+
+### Stratum
+
+
+
+## References
+
+- [Pantheon Documentation](https://docs.pantheon.pegasys.tech/en/latest/)
+- [EtherMining Reddit](https://www.reddit.com/r/EtherMining) for community engagement in Ethereum mining.
