@@ -1,6 +1,25 @@
 # Pantheon GPU Miner Research Documentation
 
-## Current Pantheon Releases
+## Contents
+
+<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+
+- [Pantheon GPU Miner Research Documentation](#pantheon-gpu-miner-research-documentation)
+	- [Contents](#contents)
+	- [1 | Current Pantheon Releases](#1-current-pantheon-releases)
+	- [2 | Mining Software](#2-mining-software)
+		- [2.1 Qtminer](#21-qtminer)
+		- [2.2 Minergate](#22-minergate)
+		- [2.3 Claymore](#23-claymore)
+		- [2.4 Phoenix Miner](#24-phoenix-miner)
+		- [2.5 Ethminer](#25-ethminer)
+	- [3 | API protocols](#3-api-protocols)
+		- [3.1 Stratum](#31-stratum)
+	- [References](#references)
+
+<!-- /TOC -->
+
+## 1 | Current Pantheon Releases
 
 Pantheon, as of now, is a Command Line Interface (CLI) solution, and such, design a user interface is not within the scope of the project. However, as a CLI application, flags must be included to perform various operations.
 
@@ -74,7 +93,7 @@ Mining on Macbook Pro GPUs have [had reported hashing rates of 8 Mh/s](https://f
 
 Certain models of the iMac and Mac Pro are sufficent to mine with, namely models with Radeon Pro Vega GPUs. However, considering how expensive these higher Mac offerings can be, how these Macs handle heat should be of concern as it may be possible mining may cause permanent damage to the computer. However, Mac compatibility should be considered for these higher models.It is also possible to mine with an external graphics card(s) (eGPU) on Mac, further creating a case for compatibility.
 
-## Mining Software
+## 2 | Mining Software
 
 
 Ethereum mining software includes the following:
@@ -85,7 +104,7 @@ Ethereum mining software includes the following:
 - [Mingergate's Miner](https://minergate.com/downloads)
 
 
-### Qtminer
+### 2.1 Qtminer
 
 Qtminer's repo [describes the project as](https://github.com/etherchain-org/qtminer) a Stratum enabled Ethereum miner, however lacks sufficient documentation.
 
@@ -96,14 +115,14 @@ have used Qtminer in the past, however these recorded cases exceed a year ago, w
 
 This miner should not be pursued for this project.
 
-### Minergate
+### 2.2 Minergate
 
 Minergate [has support for](https://minergate.com/downloads) both Windows, Linux, and MacOS. Mingergate miner is a miner [built for the MinerGate mining pool](https://minergate.com/). Minergate's website promises hashing speeds slightly more optimized than those from Ethminer and Claymore, displaying hashing power of [14.39 Mh/s, vs 14.13 and 14.31 Mh/s](https://minergate.com/downloads) for Claymore and Ethminer respectively for an AMD Rx580 GPU.
 
 However, Minergate is a GUI program, which may excessive as Pantheon is a Command Line Interface application. Minergate will also not be considered.
 
 
-### Claymore
+### 2.3 Claymore
 
 Of the mining programs most actively used by miners currently, both Claymore and Ethminer seem to be [the most broadly used](https://www.reddit.com/r/EtherMining).
 
@@ -111,12 +130,12 @@ Claymore [supports both](https://github.com/Claymore-Dual/Claymore-Dual-Miner) N
 
 Claymore charges a [1% developer fee](https://github.com/Claymore-Dual/Claymore-Dual-Miner) for ETH mining, which [reportedly increases](https://www.reddit.com/r/EtherMining/wiki/software/apps) with dual mining other currencies.
 
-### Phoenix Miner
+### 2.4 Phoenix Miner
 
 [Phoenix Miner](https://github.com/Phoenix-Miner/PhoenixMiner), like Claymore, is a miner optimized for OpenCL and CUDA cores. Phoenix Miner also contains a 1% developer fee. This fee is collected by mining with the developer's address [for 35 seconds every 90 minutes](https://github.com/Phoenix-Miner/PhoenixMiner), similar to Claymore. During its initial release, Phoenix seemed to do[ slightly better than Claymore in hashrate optimization](https://www.reddit.com/r/EtherMining/comments/7t2sd6/anyone_try_phoenix_miner_apparently_slightly/).
 
 
-### Ethminer
+### 2.5 Ethminer
 
 Ethminer originates from `cpp-ethereum` which became [Aleth](https://github.com/ethereum/aleth), a C++ Ethereum client. Ethminer started after `cpp-ethereum` discontinued its GPU mining functionality.
 
@@ -130,9 +149,9 @@ Unlike Claymore and Phoenix Miner, there exists [an Ethminer version compatible 
 
 To ensure compatibility with MacOS going forward for Pantheon, while not deeply inhibiting hashrates compared to other solutions, Ethminer should be considered for Pantheon integration.
 
-## API protocols
+## 3 | API protocols
 
-### Stratum
+### 3.1 Stratum
 
 
 
