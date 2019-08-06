@@ -2,20 +2,19 @@
 
 ## Contents
 
-<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+<!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
-- [Pantheon GPU Miner Research Documentation](#pantheon-gpu-miner-research-documentation)
-	- [Contents](#contents)
-	- [1 | Current Pantheon Releases](#1-current-pantheon-releases)
-	- [2 | Mining Software](#2-mining-software)
-		- [2.1 Qtminer](#21-qtminer)
-		- [2.2 Minergate](#22-minergate)
-		- [2.3 Claymore](#23-claymore)
-		- [2.4 Phoenix Miner](#24-phoenix-miner)
-		- [2.5 Ethminer](#25-ethminer)
-	- [3 | API protocols](#3-api-protocols)
-		- [3.1 Stratum](#31-stratum)
-	- [References](#references)
+- [Contents](#contents)
+- [1 | Current Pantheon Releases](#1-current-pantheon-releases)
+- [2 | Mining Software](#2-mining-software)
+	- [2.1 Qtminer](#21-qtminer)
+	- [2.2 Minergate](#22-minergate)
+	- [2.3 Claymore](#23-claymore)
+	- [2.4 Phoenix Miner](#24-phoenix-miner)
+	- [2.5 Ethminer](#25-ethminer)
+- [3 | API protocols](#3-api-protocols)
+	- [3.1 Stratum](#31-stratum)
+- [References](#references)
 
 <!-- /TOC -->
 
