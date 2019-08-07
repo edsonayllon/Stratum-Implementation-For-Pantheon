@@ -165,7 +165,7 @@ Where values in square brackets are optional. The value `scheme` can be any of t
 - `stratum1+tcp` for plain stratum eth-proxy compatible mode
 - `stratum2+tcp` for plain stratum NiceHash compatible mode
 
-For a Pantheon node on localhost, the hostname and port would be `localhost` and wha
+For a Pantheon node on localhost, the hostname and port would be `localhost` and, what appears to be from building from the Pantheon repository, port 30303.
 
 
 ## References
