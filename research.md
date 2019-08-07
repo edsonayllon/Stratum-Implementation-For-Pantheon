@@ -146,12 +146,26 @@ Ethminer has had over 14,000 commits, with the last commit [occuring late June, 
 
 Unlike Claymore and Phoenix Miner, there exists [an Ethminer version compatible with Mac](https://github.com/ArtSabintsev/Ethminer-for-macOS), The Mac Ethminer repo contains over 12,000 commits, however, the last commit was recieved in 2018.
 
+Ethminer also [does not seem to include a dev fee](https://github.com/ethereum-mining/ethminer).
+
 To ensure compatibility with MacOS going forward for Pantheon, while not deeply inhibiting hashrates compared to other solutions, Ethminer should be considered for Pantheon integration.
 
 ## 3 | API protocols
 
-### 3.1 Stratum
+From the [Ethminer documentation](https://github.com/ethereum-mining/ethminer/blob/master/docs/POOL_EXAMPLES_ETH.md), Ethminer connects to mining pools using the following syntax:
 
+```
+-P scheme://user[.workername][:password]@hostname:port[/...]
+```
+
+Where values in square brackets are optional. The value `scheme` can be any of the following:
+
+- `http` for getwork mode (geth)
+- `stratum+tcp` for plain stratum mode
+- `stratum1+tcp` for plain stratum eth-proxy compatible mode
+- `stratum2+tcp` for plain stratum NiceHash compatible mode
+
+For a Pantheon node on localhost, the hostname and port would be `localhost` and wha
 
 
 ## References
