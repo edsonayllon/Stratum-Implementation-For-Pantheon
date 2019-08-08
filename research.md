@@ -150,6 +150,8 @@ Ethminer also [does not seem to include a dev fee](https://github.com/ethereum-m
 
 To ensure compatibility with MacOS going forward for Pantheon, while not deeply inhibiting hashrates compared to other solutions, Ethminer should be considered for Pantheon integration.
 
+Ethminer comes in [standalone executables](https://github.com/ethereum-mining/ethminer/releases/tag/v0.18.0) for Linux, MacOS and Windows. Ethminer can also be [built from source](https://github.com/ethereum-mining/ethminer/blob/master/docs/BUILD.md).
+
 ## 3 | API protocols
 
 From the [Ethminer documentation](https://github.com/ethereum-mining/ethminer/blob/master/docs/POOL_EXAMPLES_ETH.md), Ethminer connects to mining pools using the following syntax:
@@ -171,6 +173,10 @@ For a Pantheon node on localhost, the hostname and port would be `localhost` and
 
 An overview of getwork can be [found on the Bitcoin wiki](https://en.bitcoinwiki.org/wiki/Getwork). Getwork uses JSON-RPC over an HTTP transport. Without arguments, getworkprovides a block header for a miner to find a solution.
 
+The following is a getwork implementation example for Ethereum:
+
+- https://github.com/sammy007/ether-proxy
+
 ### 3.2 Stratum Protocol
 
 The following sources provide a specification for Stratum
@@ -180,6 +186,24 @@ The following sources provide a specification for Stratum
 - [Sia Mining](https://siamining.com/stratum)
 - [Aion Network](https://github.com/aionnetwork/aion_miner/wiki/Aion-Stratum-Protocol)
 - [php-proxy-stratum](https://github.com/ctubio/php-proxy-stratum/wiki/Stratum-Mining-Protocol)
+
+
+[Originally created for](https://slushpool.com/help/stratum-protocol/) the Bitcoin client [Electrum](https://electrum.org/#home), the Stratum Protocol was ported to mining to [overcome getwork shortcomings](https://slushpool.com/help/stratum-protocol/) when considering large scale mining systems.
+
+Getwork specification for the SHA-256 mining algorithm may be [suitable for a 4.2 GH/s mining rig](https://slushpool.com/help/stratum-protocol/). This means, for a 42 GH/s mining rig, 10 concurrent requests are required. For larger scale [ASIC](https://en.bitcoin.it/wiki/ASIC) mining equipment, this leads to not enough jobs to meet the capacity of the equipment via the getwork protocol.
+
+With the introduction of mining pools, several mining rigs combining hasing capacity for shared mining rewards, [under getwork, miners had to choose](https://slushpool.com/help/stratum-protocol/) short intervals which led to higher network load and lower staling ratio, or intervals which do not overload the network and servers.[Long polling](https://en.bitcoin.it/wiki/Long_polling), the solution to this problem, [created another problem]() where long polling reconnections were difficult to distinguish from DDoS attacks.
+
+
+ The Stratum Protocol [reduces client-server communications](https://github.com/ctubio/php-proxy-stratum/wiki/Stratum-Mining-Protocol) to work under very low bandwidth, reducing server strain. [The server pushes work](https://slushpool.com/help/stratum-protocol/) to the mining client, whereby the miner can use that work until the next push, regardless of hashing rate.
+
+[Stratum uses](https://slushpool.com/help/stratum-protocol/) a plain TCP socket, with payload encoded as JSON-RPC messages.  [The mining client opens](https://slushpool.com/help/stratum-protocol/) a TCP socket and writes requests to the server in JSON messages finished by the newline character `\n`. [Each line received](https://slushpool.com/help/stratum-protocol/) by the client is a JSON-RPC fragment containing the response.
+
+
+The following are examples of Stratum implementations for Ethereum:
+- https://github.com/Atrides/eth-proxy
+- https://github.com/sammy007/open-ethereum-pool
+- https://github.com/coinfoundry/Miningcore
 
 
 ## References
