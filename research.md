@@ -167,6 +167,20 @@ Where values in square brackets are optional. The value `scheme` can be any of t
 
 For a Pantheon node on localhost, the hostname and port would be `localhost` and, what appears to be from building from the Pantheon repository, port 30303.
 
+### 3.1 Getwork Protocol
+
+An overview of getwork can be [found on the Bitcoin wiki](https://en.bitcoinwiki.org/wiki/Getwork). Getwork uses JSON-RPC over an HTTP transport. Without arguments, getworkprovides a block header for a miner to find a solution.
+
+### 3.2 Stratum Protocol
+
+The following sources provide a specification for Stratum
+
+- [Slushpool](https://slushpool.com/help/stratum-protocol/) and [Slushpool Githbut](https://github.com/slushpool/stratumprotocol/blob/master/stratum-extensions.mediawiki)
+- [Nicehash](https://github.com/nicehash/Specifications/blob/master/EthereumStratum_NiceHash_v1.0.0.txt)
+- [Sia Mining](https://siamining.com/stratum)
+- [Aion Network](https://github.com/aionnetwork/aion_miner/wiki/Aion-Stratum-Protocol)
+- [php-proxy-stratum](https://github.com/ctubio/php-proxy-stratum/wiki/Stratum-Mining-Protocol)
+
 
 ## References
 
