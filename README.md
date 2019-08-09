@@ -137,7 +137,7 @@ Claymore charges a [1% developer fee](https://github.com/Claymore-Dual/Claymore-
 
 ### 2.5 Ethminer
 
-Ethminer originates from `cpp-ethereum` which became [Aleth](https://github.com/ethereum/aleth), a C++ Ethereum client. Ethminer started after `cpp-ethereum` discontinued its GPU mining functionality.
+[Ethminer](https://github.com/ethereum-mining/ethminer) originates from `cpp-ethereum` which became [Aleth](https://github.com/ethereum/aleth), a C++ Ethereum client. Ethminer started after `cpp-ethereum` discontinued its GPU mining functionality.
 
 Ethminer [supports both](https://github.com/ethereum-mining/ethminer) NVIDIA and AMD GPUs (OpenCL and CUDA cores).
 
@@ -153,7 +153,7 @@ To ensure compatibility with MacOS going forward for Pantheon, while not deeply 
 
 Ethminer comes in [standalone executables](https://github.com/ethereum-mining/ethminer/releases/tag/v0.18.0) for Linux, MacOS and Windows. Ethminer can also be [built from source](https://github.com/ethereum-mining/ethminer/blob/master/docs/BUILD.md).
 
-## 3 | API protocols
+## 3 | API Protocols
 
 From the [Ethminer documentation](https://github.com/ethereum-mining/ethminer/blob/master/docs/POOL_EXAMPLES_ETH.md), Ethminer connects to mining pools using the following syntax:
 
@@ -182,11 +182,14 @@ The following is a getwork implementation example for Ethereum:
 
 The following sources provide a specification for Stratum
 
+
+- [EIP 1571](http://eips.ethereum.org/EIPS/eip-1571)
 - [Slushpool](https://slushpool.com/help/stratum-protocol/) and [Slushpool Githbut](https://github.com/slushpool/stratumprotocol/blob/master/stratum-extensions.mediawiki)
 - [Nicehash](https://github.com/nicehash/Specifications/blob/master/EthereumStratum_NiceHash_v1.0.0.txt)
 - [Sia Mining](https://siamining.com/stratum)
 - [Aion Network](https://github.com/aionnetwork/aion_miner/wiki/Aion-Stratum-Protocol)
 - [php-proxy-stratum](https://github.com/ctubio/php-proxy-stratum/wiki/Stratum-Mining-Protocol)
+- [open-ethereum-pool](https://github.com/sammy007/open-ethereum-pool/blob/master/docs/STRATUM.md)
 
 
 [Originally created for](https://slushpool.com/help/stratum-protocol/) the Bitcoin client [Electrum](https://electrum.org/#home), the Stratum Protocol was ported to mining to [overcome getwork shortcomings](https://slushpool.com/help/stratum-protocol/) when considering large scale mining systems.
@@ -194,6 +197,8 @@ The following sources provide a specification for Stratum
 Getwork specification for the SHA-256 mining algorithm may be [suitable for a 4.2 GH/s mining rig](https://slushpool.com/help/stratum-protocol/). This means, for a 42 GH/s mining rig, 10 concurrent requests are required. For larger scale [ASIC](https://en.bitcoin.it/wiki/ASIC) mining equipment, this leads to not enough jobs to meet the capacity of the equipment via the getwork protocol.
 
 With the introduction of mining pools, several mining rigs combining hasing capacity for shared mining rewards, [under getwork, miners had to choose](https://slushpool.com/help/stratum-protocol/) short intervals which led to higher network load and lower staling ratio, or intervals which do not overload the network and servers.[Long polling](https://en.bitcoin.it/wiki/Long_polling), the solution to this problem, [created another problem]() where long polling reconnections were difficult to distinguish from DDoS attacks.
+
+While http getwork may be sufficient for lesser powered mining rigs, since Pantheon is an enterprise level solution, Stratum should be the considered implementation.
 
 
 The Stratum Protocol [reduces client-server communications](https://github.com/ctubio/php-proxy-stratum/wiki/Stratum-Mining-Protocol) to work under very low bandwidth, reducing server strain. [The server pushes work](https://slushpool.com/help/stratum-protocol/) to the mining client, whereby the miner can use that work until the next push, regardless of hashing rate.
@@ -205,6 +210,204 @@ The following are examples of Stratum implementations for Ethereum:
 - https://github.com/Atrides/eth-proxy
 - https://github.com/sammy007/open-ethereum-pool
 - https://github.com/coinfoundry/Miningcore
+- https://bitcointalk.org/index.php?topic=1200891.0
+
+
+## 4 | Stratum Implementation
+
+## 4.1 Rationale
+
+Ethminer offers the following options for pool connection:
+- `stratum1+tcp`
+- `stratum2+tcp`
+
+`stratum1` refers to the Dwarfpool implementation of stratum, the first stratum implementation for Ethereum. The Dwarfpool stratum implementation can be found here: https://github.com/Atrides/eth-proxy.
+
+`stratum2` refers to the Nicehash specification of stratum, "EthereumStratum/1.0.0." The Nicehash stratum specification was created to offer improvements to the Dwarfpool implementation.
+
+An update the Nicehash stratum specification is given in [EIP 1571](http://eips.ethereum.org/EIPS/eip-1571), titled "EthereumStratum/2.0.0."
+
+Due to the detail of the Nicehash specification, along with improvements offered by this stratum protocol, the Nicehash stratum protocol will be explored.
+
+The [Nicehash protocol](https://github.com/nicehash/Specifications/blob/master/EthereumStratum_NiceHash_v1.0.0.txt) offers the following benefits over the Dwarfpool stratum implementation:
+
+1. Unique data per miner/worker
+2. Reduction of difficulty redundancy
+3. Reduction of data redundancy
+4. Increased consistency with the original [Slushpool stratum specification](https://slushpool.com/help/stratum-protocol/)
+5. Documentation of specification, as opposed to pure implementation
+
+An example implementation of the Nicehash stratum protocol can be found at [Miningcore's repo](https://github.com/coinfoundry/Miningcore).
+
+[Nicehash stratum specification](https://github.com/nicehash/Specifications/blob/master/EthereumStratum_NiceHash_v1.0.0.txt) is as following:
+
+### 4.2 Initial Connection
+
+Handshake happens after TCP connection is established.
+
+Miner sends data first:
+
+```
+{
+  "id": 1,
+  "method": "mining.subscribe",
+  "params": [
+    "MinerName/1.0.0", "EthereumStratum/1.0.0"
+  ]
+}\n
+```
+- `mining.subscribe`: Miner subscribes to work from a server, required before all other communication.
+- `Parameter 1`: Miner name and version
+- `Parameter 2`: Stratum protocol and version ("EthereumStratum/Version" for the Nicehash spec)
+
+Each message from miner to pool must have a unique id for the miner to properly read responses as pool may not process miner's messages in first-in-first-out manner.
+
+Server replies:
+
+```
+{
+  "id": 1,
+  "result": [
+    [
+      "mining.notify",
+      "ae6812eb4cd7735a302a8a9dd95cf71f",
+      "EthereumStratum/1.0.0"
+    ],
+    "080c"
+  ],
+  "error": null
+}\n
+```
+- `mining.notify`: Pushes new work to the miner.
+- `Parameter 2` of `result`: Extranonce (in Hex) set by pool. Extranonce may be max 3 bytes in size.
+- `Parameter 3` of `result`: "EthereumStratum/1.0.0". If the pool does not report this parameter, or a different version than is supported is reported, the miner should terminate connection.
+
+
+Miner shall authorize during initial handshake.
+
+### 4.3 Difficulty
+
+Before first job (work) is provided, pool must set difficulty:
+
+```
+{
+  "id": null,
+  "method": "mining.set_difficulty",
+  "params": [
+    0.5
+  ]
+}\n
+```
+- `mining.set_difficulty`: Signals the miner to stop submitting shares below the new difficulty.
+- `Parameter 1`: Difficulty in `double` data-type. Conversion
+between difficulty and target is done as with Bitcoin.
+Difficulty of 1 is transformed to target in HEX:
+`00000000ffff0000000000000000000000000000000000000000000000000000`.
+
+If the pool does not set difficulty before first job, then miner assumes difficulty 1 was set.
+
+When difficulty changes, the miner uses the new difficulty for all subsequent jobs recieved.
+
+### 4.4 ExtraNonce
+
+If miner has subscribed to extranonce notifications, then pool may change
+miner's extranonce by sending:
+
+```
+{
+  "id": null,
+  "method": "mining.set_extranonce",
+  "params": [
+    "af4c"
+  ]
+}\n
+```
+
+- `mining.set_extranonce`: Miner replaces the initial subscription values starting with the next recieved job
+
+New extranonce is valid for all subsequent jobs recieved.
+
+### 4.5 Jobs
+
+Pool informs miners about job (work) by sending:
+
+```
+{
+  "id": null,
+  "method": "mining.notify",
+  "params": [
+    "bf0488aa",
+    "abad8f99f3918bf903c6a909d9bbc0fdfa5a2f4b9cb1196175ec825c6610126c",
+    "645cf20198c2f3861e947d4f67e3ab63b7b2e24dcc9095bd9123e7b33371f6cc",
+    true
+  ]
+}\n
+```
+
+- `mining.notify`: Pushes new work to the miner.
+- `Parameter 1`: job ID (must be HEX number of any
+size)
+- `Parameter 2`: Seedhash. Sent with every job to support possible multipools which rapidly change currencies.
+- `Parameter 3`: Headershash.
+- `Parameter 4`: Boolean `cleanjobs`.  If set `true`, the miner must clear queue of jobs and immediatelly work on new provided job, as old jobs will result in stale share error.
+
+Miner uses seedhash to identify DAG, then tries to find share below
+target (which is created out of provided difficulty) with headerhash,
+extranonce and own minernonce.
+
+Share submission (completed jobs) by miner:
+
+```
+{
+  "id": 244,
+  "method": "mining.submit",
+  "params": [
+    "username",
+    "bf0488aa",
+    "6a909d9bbc0f"
+  ]
+}\n
+```
+
+- `mining.submit`: Submits shares
+- `Parameter 1`: username
+- `Parameter 2`: job ID
+- `Parameter 3`: minernonce
+
+In the above example minernonce is 6 bytes, because
+provided extranonce was 2 bytes. If the pool provides 3 bytes extranonce,
+then minernonce must be 5 bytes.
+
+For every work submit, the pool must respond with standard stratum
+response:
+
+```
+{
+  "id": 244,
+  "result": true,
+  "error": null
+}\n
+```
+
+For shares accepted.
+
+
+```
+{
+  "id": 244,
+  "result": false,
+  "error": [
+    -1,
+    "Job not found",
+    NULL
+  ]
+}\n
+
+```
+
+For shares not accepted.
+
+The `id` is again the job ID.
 
 
 ## References
