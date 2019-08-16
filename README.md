@@ -415,6 +415,29 @@ For shares not accepted.
 
 The `id` is again the job ID.
 
+## 5 | Process for Integrating the Miner
+
+Ethminer can be included in the services directory for Pantheon.
+
+A flag enabling Gpu mining should be created for the user. The user does not need  to know which GPU mining software is employed, as they may not know what mining software exists. The flags for mining, therefore, should be generic, such as `--gpu-mining-enabled`, instead of specific such as `--claymore` or `--ethminer`.
+
+Flags for Pantheon are found within `PantheonCommand.java`.
+
+When the flag for GPU mining is enabled, Ethminer should be built from source within `services/ethminer`. The procedure to build Ethminer from source differs from Windows to Linux and OSX. Because of the differing procedures, operating system should be identified by Pantheon, or be a required flag for GPU mining.
+
+Build instructiosn for Ethminer found here: https://github.com/ethereum-mining/ethminer/blob/master/docs/BUILD.md#windows.
+
+Once Ethminer is built, it can interact with the Ethereum node served by Pantheon. For getwork mining, Ethminer requires an IP and port, as well as an address (coinbase) recieving mining rewards. To increase speed of production, if getwork functions by default, that should be implemented first, and then Stratum implemented second.
+
+The Ethereum node must be created first, and then Ethminer can poll the RPC port exposed.
+
+Ethminer can be accessed by Pantheon with something similar to the following:
+
+```
+import java.lang.ProcessBuilder;
+ProcessBuilder processBuilder = new ProcessBuilder();
+processBuilder.command("/services/ethminer/build/ethminer.exe", "-P", "http://coinbase@127.0.0.1:30303");
+```
 
 ## References
 
