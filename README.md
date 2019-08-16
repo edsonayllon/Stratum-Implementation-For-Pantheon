@@ -130,10 +130,14 @@ Claymore [supports both](https://github.com/Claymore-Dual/Claymore-Dual-Miner) N
 
 Claymore charges a [1% developer fee](https://github.com/Claymore-Dual/Claymore-Dual-Miner) for ETH mining, which [reportedly increases](https://www.reddit.com/r/EtherMining/wiki/software/apps) with dual mining other currencies.
 
+Claymore does not seem to be have any software license.
+
 ### 2.4 Phoenix Miner
 
 [Phoenix Miner](https://github.com/Phoenix-Miner/PhoenixMiner), like Claymore, is a miner optimized for OpenCL and CUDA cores. Phoenix Miner also contains a 1% developer fee. This fee is collected by mining with the developer's address [for 35 seconds every 90 minutes](https://github.com/Phoenix-Miner/PhoenixMiner), similar to Claymore. During its initial release, Phoenix seemed to do[ slightly better than Claymore in hashrate optimization](https://www.reddit.com/r/EtherMining/comments/7t2sd6/anyone_try_phoenix_miner_apparently_slightly/).
 
+
+Phoenix Miner does not seem to be have any software license.
 
 ### 2.5 Ethminer
 
@@ -149,9 +153,11 @@ Unlike Claymore and Phoenix Miner, there exists [an Ethminer version compatible 
 
 Ethminer also [does not seem to include a dev fee](https://github.com/ethereum-mining/ethminer).
 
-To ensure compatibility with MacOS going forward for Pantheon, while not deeply inhibiting hashrates compared to other solutions, Ethminer should be considered for Pantheon integration.
+Ethminer has compatibility for Windows, Linux and [MacOS](https://github.com/ArtSabintsev/Ethminer-for-macOS).
 
-Ethminer comes in [standalone executables](https://github.com/ethereum-mining/ethminer/releases/tag/v0.18.0) for Linux, MacOS and Windows. Ethminer can also be [built from source](https://github.com/ethereum-mining/ethminer/blob/master/docs/BUILD.md).
+Ethminer comes in [standalone executables](https://github.com/ethereum-mining/ethminer/releases/tag/v0.18.0) for Linux and Windows. Ethminer can also be [built from source](https://github.com/ethereum-mining/ethminer/blob/master/docs/BUILD.md).
+
+However, Ethminer is GPL 3.0, which is compatible with Pantheon's Apache 2.0 license. However, the previous MacOS build for Ethminer is forked from `cpp-ethereum` when it was licensed GPL 2.0, which  is incompatible with Apache 2.0.
 
 ## 3 | API Protocols
 
