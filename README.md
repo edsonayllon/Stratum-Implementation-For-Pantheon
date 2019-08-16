@@ -155,9 +155,9 @@ Ethminer also [does not seem to include a dev fee](https://github.com/ethereum-m
 
 Ethminer has compatibility for Windows, Linux and [MacOS](https://github.com/ArtSabintsev/Ethminer-for-macOS).
 
-Ethminer comes in [standalone executables](https://github.com/ethereum-mining/ethminer/releases/tag/v0.18.0) for Linux and Windows. Ethminer can also be [built from source](https://github.com/ethereum-mining/ethminer/blob/master/docs/BUILD.md).
+Ethminer comes in [standalone executables](https://github.com/ethereum-mining/ethminer/releases/tag/v0.18.0) for Linux and Windows. Ethminer can also be [built from source](https://github.com/ethereum-mining/ethminer/blob/master/docs/BUILD.md) for Windows, Linux, and MacOS. Binaries are not included in Pantheon source, so unique builds per operating system can be made through the Pantheon CLI. Because of MacOS compatibility, no dev fee as default, and active development by the Ethminer devs, Ethminer should be the miner considered for Pantheon.
 
-However, Ethminer is GPL 3.0, which is compatible with Pantheon's Apache 2.0 license. However, the previous MacOS build for Ethminer is forked from `cpp-ethereum` when it was licensed GPL 2.0, which  is incompatible with Apache 2.0.
+Ethminer is GPL 3.0, which is compatible with Pantheon's Apache 2.0 license.
 
 ## 3 | API Protocols
 
