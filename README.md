@@ -190,7 +190,7 @@ The following sources provide a specification for Stratum
 
 
 - [EIP 1571](http://eips.ethereum.org/EIPS/eip-1571)
-- [Slushpool](https://slushpool.com/help/stratum-protocol/) and [Slushpool Githbut](https://github.com/slushpool/stratumprotocol/blob/master/stratum-extensions.mediawiki)
+- [Slushpool](https://slushpool.com/help/stratum-protocol/) and [Slushpool Github](https://github.com/slushpool/stratumprotocol/blob/master/stratum-extensions.mediawiki)
 - [Nicehash](https://github.com/nicehash/Specifications/blob/master/EthereumStratum_NiceHash_v1.0.0.txt)
 - [Sia Mining](https://siamining.com/stratum)
 - [Aion Network](https://github.com/aionnetwork/aion_miner/wiki/Aion-Stratum-Protocol)
