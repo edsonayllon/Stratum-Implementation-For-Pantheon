@@ -221,13 +221,13 @@ The following are examples of Stratum implementations for Ethereum:
 
 ## 4 | Stratum Implementation
 
-Stratum is a communication standard for pools and miners based on the  JSON encoded remote procedure call version 2.0 ([JSON-RPC 2.0](https://www.jsonrpc.org/specification)). JSON-RPC is an API protocol predating Graphql and REST. 
+Stratum is a communication standard for pools and miners based on the  JSON encoded remote procedure call version 2.0 ([JSON-RPC 2.0](https://www.jsonrpc.org/specification)). JSON-RPC is an API protocol predating Graphql and REST.
 
-A client sends a request to the server, calling a function/method. If the request contains an ID, the server provides a response to the client. 
+A client sends a request to the server, calling a function/method. If the request contains an ID, the server provides a response to the client.
 
 Stratum uses the following JSON-RPC native message types:
 - request
-- response 
+- response
 - notification
 
 
@@ -245,7 +245,7 @@ The response to requests contain the following components:
 
 In JSON-RPC 1.0, both `result` and `error` would be supplied with each response, with a value of `null` for the field not used. However, in JSON-RPC 2.0, either `result` or `error` is sent, with `null` omitted.
 
-A notification, is a request requiring no response. As so, notifications are formated like requests, but with `id` omitted in JSON-RPC 2.0. 
+A notification, is a request requiring no response. As so, notifications are formated like requests, but with `id` omitted in JSON-RPC 2.0.
 
 - `method`
 - `params`
@@ -259,7 +259,10 @@ Stratum utilizes [the following methods](https://en.bitcoin.it/wiki/Stratum_mini
 - `mining.set_difficulty`: Signals the miner to stop submitting shares below the new difficulty.
 - `mining.submit`: Miner submits shares
 
-## 4.1 Rationale
+
+### 4.1 Stratum 2.0 (NiceHash Stratum Protocol)
+
+#### 4.1.1 Rationale
 
 Ethminer offers the following options for pool connection:
 - `stratum1+tcp`
@@ -287,7 +290,7 @@ An example implementation of the Nicehash stratum protocol can be found at [Mini
 
 [Nicehash stratum specification](https://github.com/nicehash/Specifications/blob/master/EthereumStratum_NiceHash_v1.0.0.txt) is as following. All standard Stratum protocol is employed, except for the following:
 
-### 4.2 Initial Connection
+#### 4.1.2 Initial Connection
 
 Handshake happens after TCP connection is established.
 
@@ -331,7 +334,7 @@ Server replies:
 
 Miner shall authorize during initial handshake.
 
-### 4.3 Difficulty
+#### 4.1.3 Difficulty
 
 Before first job (work) is provided, pool must set difficulty:
 
@@ -354,7 +357,7 @@ If the pool does not set difficulty before first job, then miner assumes difficu
 
 When difficulty changes, the miner uses the new difficulty for all subsequent jobs recieved.
 
-### 4.4 ExtraNonce
+#### 4.1.4 ExtraNonce
 
 If miner has subscribed to extranonce notifications, then pool may change
 miner's extranonce by sending:
@@ -373,7 +376,7 @@ miner's extranonce by sending:
 
 New extranonce is valid for all subsequent jobs recieved.
 
-### 4.5 Jobs
+#### 4.1.5 Jobs
 
 Pool informs miners about job (work) by sending:
 
@@ -453,6 +456,137 @@ For shares accepted.
 
 For shares not accepted.
 
+### 4.2 Stratum 1.0 (Dwarfpool Stratum Protocol)
+
+#### 4.2.1 Rationale
+
+Stratum version 1 for Ethereum is broadly supported by miners. The majority of mining pools use this protocol. The motivation for implementing this protocol over Stratum 2, however, is the ease of implementation. Stratum 1 may be simpler to integrate a working version, as it contains less restrictions. This may be sufficient for an initial implementation, and an upgrade can be done further on. However, when Ethereum transitions to Proof of Stake (PoS, if Pantheon also transitions to PoS for enterprise, such an upgrade may become unnecessary.
+
+Documentaion for Stratum 2.0 was left in the case Stratum 2.0 for Ethereum is desired to be pursued further by the Pantheon team.
+
+Specification for Stratum 1 appear on [open-ethereum-pool](https://github.com/sammy007/open-ethereum-pool/blob/master/docs/STRATUM.md)'s Stratum documentation. That documentation will be used as a reference.
+
+#### 4.1.2 Initial Connection
+
+Open Ethereum Pool uses JSON-RPC 2.0 for their server.
+
+A request from the miner to the server has the following syntax:
+
+```
+{
+  "id": 1,
+  "jsonrpc": "2.0",
+  "method": "eth_submitLogin",
+  "params": ["0xb85150eb365e7df0941f0cf08235f987ba91506a"]
+}
+```
+
+A successful response returns the following:
+
+
+```
+{ "id": 1, "jsonrpc": "2.0", "result": true }
+```
+
+Errors are handled as follows:
+
+```
+{
+  "id": 1,
+  "jsonrpc": "2.0",
+  "result": null,
+  "error": {
+    code: -1,
+    message: "Invalid login"
+  }
+}
+````
+
+
+
+#### 4.1.5 Jobs
+
+Job requests have the following syntax:
+
+```
+{ "id": 1, "jsonrpc": "2.0", "method": "eth_getWork" }
+
+```
+
+A successful response returns the following:
+
+```
+{
+  "id": 1,
+  "jsonrpc": "2.0",
+  "result": [
+      "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
+      "0x5eed00000000000000000000000000005eed0000000000000000000000000000",
+      "0xd1ff1c01710000000000000000000000d1ff1c01710000000000000000000000"
+    ]
+}
+```
+
+Errors return the following:
+
+```
+{
+  "id": 10,
+  "result": null,
+  "error":
+  {
+    code: 0,
+    message: "Work not ready"
+  }
+}
+```
+
+The server pushes new jobs to the miner as they become available through a JSON-RPC notification.
+
+```
+Server sends job to peers if new job is available:
+
+{
+  "jsonrpc": "2.0",
+  "result": [
+      "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
+      "0x5eed00000000000000000000000000005eed0000000000000000000000000000",
+      "0xd1ff1c01710000000000000000000000d1ff1c01710000000000000000000000"
+    ]
+}
+```
+
+A share submission request looks like the following:
+
+```
+{
+  "id": 1,
+  "jsonrpc": "2.0",
+  "method": "eth_submitWork",
+  "params": [
+    "0xe05d1fd4002d962f",
+    "0x6c872e2304cd1e64b553a65387d7383470f22331aff288cbce5748dc430f016a",
+    "0x2b20a6c641ed155b893ee750ef90ec3be5d24736d16838b84759385b6724220d"
+  ]
+}
+```
+
+A response from the server contains the following:
+
+```
+{ "id": 1, "jsonrpc": "2.0", "result": true }
+{ "id": 1, "jsonrpc": "2.0", "result": false }
+```
+
+On Open Ethereum Pool's Stratum server, invalid share submissions return a message, followed by a temporary ban.
+
+```
+{ "id": 1, "jsonrpc": "2.0", "result": null, "error": { code: 23, message: "Invalid share" } }
+{ "id": 1, "jsonrpc": "2.0", "result": null, "error": { code: 22, message: "Duplicate share" } }
+{ "id": 1, "jsonrpc": "2.0", "result": null, "error": { code: -1, message: "High rate of invalid shares" } }
+{ "id": 1, "jsonrpc": "2.0", "result": null, "error": { code: 25, message: "Not subscribed" } }
+{ "id": 1, "jsonrpc": "2.0", "result": null, "error": { code: -1, message: "Malformed PoW result" } }
+```
 
 
 ## References
