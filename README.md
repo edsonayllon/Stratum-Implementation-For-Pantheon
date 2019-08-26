@@ -221,6 +221,44 @@ The following are examples of Stratum implementations for Ethereum:
 
 ## 4 | Stratum Implementation
 
+Stratum is a communication standard for pools and miners based on the  JSON encoded remote procedure call version 2.0 ([JSON-RPC 2.0](https://www.jsonrpc.org/specification)). JSON-RPC is an API protocol predating Graphql and REST. 
+
+A client sends a request to the server, calling a function/method. If the request contains an ID, the server provides a response to the client. 
+
+Stratum uses the following JSON-RPC native message types:
+- request
+- response 
+- notification
+
+
+A JSON-RPC request contains the following components:
+
+- `method`: The name of the method called
+- `params`: An Object or Array passed as parameters to the method
+- `id`: A value of any type used to match a response to a request
+
+The response to requests contain the following components:
+
+- `result`: The data returned by the method.
+- `error`: A specified error code if there was an error.
+- `id`: The id of the request it is responding to
+
+In JSON-RPC 1.0, both `result` and `error` would be supplied with each response, with a value of `null` for the field not used. However, in JSON-RPC 2.0, either `result` or `error` is sent, with `null` omitted.
+
+A notification, is a request requiring no response. As so, notifications are formated like requests, but with `id` omitted in JSON-RPC 2.0. 
+
+- `method`
+- `params`
+
+The JSON-RPC behavior of Stratum is done from server to miner via socket transport. In a standard Transmission Control Protocol (TCP) socket, clients initiate connection, then both sides can initiate transport of payload (application protocol) anytime.
+
+
+Stratum utilizes [the following methods](https://en.bitcoin.it/wiki/Stratum_mining_protocol):
+- `mining.subscribe`: Miner subscribes to work from a server, required before all other communication.
+- `mining.notify`: Server pushes new work to the miner.
+- `mining.set_difficulty`: Signals the miner to stop submitting shares below the new difficulty.
+- `mining.submit`: Miner submits shares
+
 ## 4.1 Rationale
 
 Ethminer offers the following options for pool connection:
@@ -235,6 +273,8 @@ An update the Nicehash stratum specification is given in [EIP 1571](http://eips.
 
 Due to the detail of the Nicehash specification, along with improvements offered by this stratum protocol, the Nicehash stratum protocol will be explored.
 
+The Nicehash stratum protocol is supported by Ethminer and Claymore. Configuration options to enable mining for Claymore under the Nicehash protocol is found in the [Claymore Readme txt file](https://github.com/Claymore-Dual/Claymore-Dual-Miner/blob/master/files/Readme!!!.txt).
+
 The [Nicehash protocol](https://github.com/nicehash/Specifications/blob/master/EthereumStratum_NiceHash_v1.0.0.txt) offers the following benefits over the Dwarfpool stratum implementation:
 
 1. Unique data per miner/worker
@@ -245,7 +285,7 @@ The [Nicehash protocol](https://github.com/nicehash/Specifications/blob/master/E
 
 An example implementation of the Nicehash stratum protocol can be found at [Miningcore's repo](https://github.com/coinfoundry/Miningcore).
 
-[Nicehash stratum specification](https://github.com/nicehash/Specifications/blob/master/EthereumStratum_NiceHash_v1.0.0.txt) is as following:
+[Nicehash stratum specification](https://github.com/nicehash/Specifications/blob/master/EthereumStratum_NiceHash_v1.0.0.txt) is as following. All standard Stratum protocol is employed, except for the following:
 
 ### 4.2 Initial Connection
 
@@ -413,7 +453,6 @@ For shares accepted.
 
 For shares not accepted.
 
-The `id` is again the job ID.
 
 
 ## References
