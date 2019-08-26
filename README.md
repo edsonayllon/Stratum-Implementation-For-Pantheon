@@ -460,7 +460,7 @@ For shares not accepted.
 
 #### 4.2.1 Rationale
 
-Stratum version 1 for Ethereum is broadly supported by miners. The majority of mining pools use this protocol. The motivation for implementing this protocol over Stratum 2, however, is the ease of implementation. Stratum 1 may be simpler to integrate a working version, as it contains less restrictions. This may be sufficient for an initial implementation, and an upgrade can be done further on. However, when Ethereum transitions to Proof of Stake (PoS, if Pantheon also transitions to PoS for enterprise, such an upgrade may become unnecessary.
+Stratum version 1 for Ethereum is broadly supported by miners. The majority of mining pools use this protocol. The motivation for implementing this protocol over Stratum 2, however, is the ease of implementation. Stratum 1 may be simpler to integrate a working version, as it contains less restrictions. This may be sufficient for an initial implementation, and an upgrade can be done further on. However, when Ethereum transitions to Proof of Stake (PoS), if Pantheon also transitions to PoS for enterprise, such an upgrade may become unnecessary.
 
 Documentaion for Stratum 2.0 was left in the case Stratum 2.0 for Ethereum is desired to be pursued further by the Pantheon team.
 
