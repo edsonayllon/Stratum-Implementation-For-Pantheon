@@ -466,6 +466,16 @@ Documentaion for Stratum 2.0 was left in the case Stratum 2.0 for Ethereum is de
 
 Specification for Stratum 1 appear on [open-ethereum-pool](https://github.com/sammy007/open-ethereum-pool/blob/master/docs/STRATUM.md)'s Stratum documentation. That documentation will be used as a reference.
 
+The Dwarfpool version of stratum [uses the JSON-RPC 2.0 specification without altercations for their stratum](https://github.com/Atrides/eth-proxy/blob/master/stratum/protocol.py).
+
+Example:
+
+```
+# eth-proxy/stratum/protocol.py
+({'id': request_id, 'method': method, 'params': params, 'jsonrpc':'2.0', 'worker': worker}
+```
+
+
 #### 4.1.2 Initial Connection
 
 Open Ethereum Pool uses JSON-RPC 2.0 for their server.
