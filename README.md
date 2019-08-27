@@ -464,7 +464,7 @@ Stratum version 1 for Ethereum is broadly supported by miners. The majority of m
 
 Documentaion for Stratum 2.0 was left in the case Stratum 2.0 for Ethereum is desired to be pursued further by the Pantheon team.
 
-Specification for Stratum 1 appear on [open-ethereum-pool](https://github.com/sammy007/open-ethereum-pool/blob/master/docs/STRATUM.md)'s Stratum documentation. That documentation will be used as a reference.
+Specification for Stratum 1 appear on [open-ethereum-pool](https://github.com/sammy007/open-ethereum-pool/blob/master/docs/STRATUM.md)'s Stratum documentation. That specification mimics the functionility found on [`eth-proxy`](https://github.com/Atrides/eth-proxy). That documentation will be used as a reference.
 
 The Dwarfpool version of stratum [uses the JSON-RPC 2.0 specification without altercations for their stratum](https://github.com/Atrides/eth-proxy/blob/master/stratum/protocol.py).
 
@@ -475,10 +475,39 @@ Example:
 ({'id': request_id, 'method': method, 'params': params, 'jsonrpc':'2.0', 'worker': worker}
 ```
 
+The Dwarfpool stratum protocol deviates from the original Slushpool stratum protocol in method naming convention.
+
+Comparison of [Dwarfpool's stratum vs Slushpool's original spec](https://slushpool.com/help/stratum-protocol/#!/manual/stratum-protocol):
+
+```
+*The eth-proxy method*
+Stratum 0: Connecting to us2.ethpool.org:3333
+Stratum 0: Connection Established Successfully
+Stratum 0: Sending Message - {"id": 1, "jsonrpc": "2.0", "method": "eth_submitLogin", "params": ["ADDRESS", "EMAIL"]}
+Stratum 1: Connecting to eth.f2pool.com:8008
+Stratum 0: Message Received - {"id":1,"jsonrpc":"2.0","result":true}
+Stratum 1: Connection Established Successfully
+Stratum 1: Sending Message - {"id": 1, "jsonrpc": "2.0", "method": "eth_submitLogin", "params": ["ADDRESS", "EMAIL"]}
+Stratum 1: Message Received - {"jsonrpc":"2.0","id":1,"result":true,"error":null}
+
+---
+*Real stratum method*
+Stratum 0: Connecting to us2.ethpool.org:3333
+Stratum 0: Connection Established Successfully
+Stratum 0: Sending Message - {"id": 1, "jsonrpc": "2.0", "method": "mining.subscribe", "params": []}
+Stratum 1: Connecting to eth.f2pool.com:8008
+Stratum 0: Message Received - {"id":1,"jsonrpc":"2.0","result":true}
+Stratum 1: Connection Established Successfully
+Stratum 1: Sending Message - {"id": 1, "jsonrpc": "2.0", "method": "mining.subscribe", "params": []}
+Stratum 1: No Message Received After Timeout!
+Stratum 1: Receive Error - An existing connection was forcibly closed by the remote hostname
+```
+
 
 #### 4.1.2 Initial Connection
 
 Open Ethereum Pool uses JSON-RPC 2.0 for their server.
+
 
 A request from the miner to the server has the following syntax:
 
