@@ -456,6 +456,9 @@ For shares accepted.
 
 For shares not accepted.
 
+The mining protocol by Dwarfpool differs from the original stratum spec as it seems method names are borrowed from [Ethereum's RPC API naming convention](https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_getwork).
+
+
 ### 4.2 Stratum 1.0 (Dwarfpool Stratum Protocol)
 
 #### 4.2.1 Rationale
@@ -566,7 +569,14 @@ A successful response returns the following:
 }
 ```
 
-Errors return the following:
+Following [Ethereum's JSON-RPC documentation](https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_getwork), the values in the results array are as follows:
+
+- `DATA, 32 Bytes` - current block header pow-hash
+- `DATA, 32 Bytes` - the seed hash used for the DAG.
+- `DATA, 32 Bytes` - the boundary condition ("target"), 2^256 / difficulty.
+
+
+If no work is available at the time of request, server return the following error:
 
 ```
 {
@@ -595,6 +605,8 @@ Server sends job to peers if new job is available:
 }
 ```
 
+The results array from job notifications are the same response as with job requests, as seen above.
+
 A share submission request looks like the following:
 
 ```
@@ -609,6 +621,11 @@ A share submission request looks like the following:
   ]
 }
 ```
+
+Parameters include:
+- `DATA, 8 Bytes` - The nonce found (64 bits)
+- `DATA, 32 Bytes` - The header's pow-hash (256 bits)
+- `DATA, 32 Bytes` - The mix digest (256 bits)
 
 A response from the server contains the following:
 
