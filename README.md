@@ -230,7 +230,7 @@ The Ethereum implementation of stratum started with creating a TCP proxy for a t
 
 Ethereum's Stratum 1 protocol deviates from Slushpool's stratum specification made for Bitcoin. RPC methods in Stratum 1 differ from the original Slushpool spec, where `mining.submit` from the original stratum spec is labeled `eth_getWork` in Dwarfpool's stratum spec. `eth_getWork` is a method from [Ethereum's JSON-RPC api](https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_getwork). The Stratum specification from Slushpool also is not real JSON RPC, but is based on JSON RPC 2.0, omitting JSON RPC version, and appending character `/n` with each message. Stratum 1, or the Dwarfpool spec of stratum seems to be a TCP proxy for the getWork HTTP RPC of geth.
 
-While Dwarfpool's stratum specification deviates from Slushpool's original stratum specification, Dwarfpool reports increased mining rewards of 10-20% compared to HTTP getWork.
+While Dwarfpool's stratum specification deviates from Slushpool's original stratum specification, and is actually a proxy for HTTP getWork, Dwarfpool reports increased mining rewards of 10-20% compared to HTTP getWork.
 
 In response to Dwarfpool's deviation from the original Slushpool stratum specification for Bitcoin, Nicehash developed a new stratum protocol for Ethereum which follows Slushpool Stratum closely, while also providing more detailed documentation on the protocol. Ethminer calls this stratum spec Stratum 2, while Nicehash calls this stratum specification `EthereumStratum/1.0.0`.
 
