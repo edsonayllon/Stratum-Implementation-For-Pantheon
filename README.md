@@ -184,6 +184,13 @@ The following is a getwork implementation example for Ethereum:
 
 - https://github.com/sammy007/ether-proxy
 
+The Ethereum version of HTTP Getwork pools originally used was initiating a `go-ethereum` (geth) node with RPC enabled. Documentation for enabling gpu mining with geth is [found on the Ethereum Gitbook](https://ethereum.gitbooks.io/frontier-guide/content/gpu.html).
+
+
+
+
+
+
 ### 3.2 Stratum Protocol
 
 The following sources provide a specification for Stratum
@@ -218,6 +225,16 @@ The following are examples of Stratum implementations for Ethereum:
 - https://github.com/coinfoundry/Miningcore
 - https://bitcointalk.org/index.php?topic=1200891.0
 
+
+The Ethereum implementation of stratum started with creating a TCP proxy for a traditional geth HTTP RPC node. The first mining pool to implement stratum for Ethereum was Dwarfpool, and as such, all pools followed Dwarfpool's stratum specification (spec) at first, while most major mining pools still follow this specification currently. Ethminer calls this spec Stratum 1.
+
+Ethereum's Stratum 1 protocol deviates from Slushpool's stratum specification made for Bitcoin. RPC methods in Stratum 1 differ from the original Slushpool spec, where `mining.submit` from the original stratum spec is labeled `eth_getWork` in Dwarfpool's stratum spec. `eth_getWork` is a method from [Ethereum's JSON-RPC api](https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_getwork). The Stratum specification from Slushpool also is not real JSON RPC, but is based on JSON RPC 2.0, omitting JSON RPC version, and appending character `/n` with each message. Stratum 1, or the Dwarfpool spec of stratum seems to be a TCP proxy for the getWork HTTP RPC of geth.
+
+While Dwarfpool's stratum specification deviates from Slushpool's original stratum specification, Dwarfpool reports increased mining rewards of 10-20% compared to HTTP getWork.
+
+In response to Dwarfpool's deviation from the original Slushpool stratum specification for Bitcoin, Nicehash developed a new stratum protocol for Ethereum which follows Slushpool Stratum closely, while also providing more detailed documentation on the protocol. Ethminer calls this stratum spec Stratum 2, while Nicehash calls this stratum specification `EthereumStratum/1.0.0`.
+
+A stratum specification building on Nicehash's stratum spec, which the creator named `EthereumStratum/2.0.0`, is documented under [EIP 1517](https://eips.ethereum.org/EIPS/eip-1571). The EthereumStratum/2.0.0 EIP draft was created November 2018.
 
 ## 4 | Stratum Implementation
 
