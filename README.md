@@ -282,7 +282,7 @@ A notification, is a request requiring no response. As so, notifications are for
 The JSON-RPC behavior of Stratum is done from server to miner via socket transport. In a standard Transmission Control Protocol (TCP) socket, clients initiate connection, then both sides can initiate transport of payload (application protocol) anytime.
 
 
-Stratum utilizes [the following methods](https://en.bitcoin.it/wiki/Stratum_mining_protocol):
+Bitcoin Stratum utilizes [the following methods](https://en.bitcoin.it/wiki/Stratum_mining_protocol):
 - `mining.subscribe`: Miner subscribes to work from a server, required before all other communication.
 - `mining.notify`: Server pushes new work to the miner.
 - `mining.set_difficulty`: Signals the miner to stop submitting shares below the new difficulty.
