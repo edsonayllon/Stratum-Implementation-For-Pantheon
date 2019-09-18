@@ -17,6 +17,7 @@
 		- [3.1 Getwork Protocol](#31-getwork-protocol)
 		- [3.2 Stratum Protocol](#32-stratum-protocol)
 	- [4 | Stratum Implementation](#4-stratum-implementation)
+		- [4.0 GetWork](#40-getwork)
 		- [4.1 Stratum 1.0 (Dwarfpool Stratum Protocol)](#41-stratum-10-dwarfpool-stratum-protocol)
 			- [4.1.1 Rationale](#411-rationale)
 			- [4.1.2 Initial Connection](#412-initial-connection)
@@ -288,11 +289,23 @@ Stratum utilizes [the following methods](https://en.bitcoin.it/wiki/Stratum_mini
 - `mining.set_difficulty`: Signals the miner to stop submitting shares below the new difficulty.
 - `mining.submit`: Miner submits shares
 
+### 4.0 GetWork
+
+GetWork comes from the [Ethereum JSON RPC `eth_getWork` method](https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_getwork). For this, an Ethereum HTTP RPC endpoint is needed with `eth_getWork` producing work, and `eth_submitWork` accepting solutions. Most Ethereum mining pools traditionally use `go-ethereum` (geth) for this.
+
+For EthMiner, the following conditions must be met.
+- JSON responses must be on one Line
+- Work must always be available from `eth_getWork`
+
+If a JSON response spans more than one line (has line breaks), EthMiner will throw an error and not read any work.
+
+If work is available one moment, but the next displays no work, EthMiner will abort a connection, as it queries `eth_getWork` multiple times to fulfill hashing rate. Once work is available, that work should be provided by `eth_getWork` until new work becomes available.  
+
 ### 4.1 Stratum 1.0 (Dwarfpool Stratum Protocol)
 
 #### 4.1.1 Rationale
 
-The Dwarfpool Stratum spec is simply a TCP proxy for HTTP getwork, where new work is pushed to miners via JSON RPC notifications. That simple change produces 10-20% greater rewards per miner than getwork, depending on a rig's hashing capacity. For this version to run, getwork must be operational first. For Ethereum, getwork uses normal API protocols for Ethereum JSON RPC. Traditional mining pools use `go-ethereum` (geth) for getwork, so, to add getwork to Pantheon, see how geth implements HTTP JSON RPC. Given getwork is operation, this stratum spec is the easiest to implement for Ethereum. 
+The Dwarfpool Stratum spec is simply a TCP proxy for HTTP getwork, where new work is pushed to miners via JSON RPC notifications. That simple change produces 10-20% greater rewards per miner than getwork, depending on a rig's hashing capacity. For this version to run, getwork must be operational first. For Ethereum, getwork uses normal API protocols for Ethereum JSON RPC. Traditional mining pools use `go-ethereum` (geth) for getwork, so, to add getwork to Pantheon, see how geth implements HTTP JSON RPC. Given getwork is operation, this stratum spec is the easiest to implement for Ethereum.
 
 Stratum version 1 for Ethereum is broadly supported by miners. The majority of mining pools use this protocol. The motivation for implementing this protocol over Stratum 2, however, is the ease of implementation. Stratum 1 may be simpler to integrate a working version, as it contains less restrictions. This may be sufficient for an initial implementation, and an upgrade can be done further on. However, when Ethereum transitions to Proof of Stake (PoS), if Pantheon also transitions to PoS for enterprise, such an upgrade may become unnecessary.
 
