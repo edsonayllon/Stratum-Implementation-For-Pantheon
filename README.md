@@ -300,7 +300,7 @@ If a JSON response spans more than one line (has line breaks), EthMiner will thr
 
 If work is available one moment, but the next displays no work, EthMiner will abort a connection, as it queries `eth_getWork` multiple times to fulfill hashing rate. Once work is available, that work should be provided by `eth_getWork` until new work becomes available.  
 
-### 4.1 Stratum 1.0 (Dwarfpool Stratum Protocol)
+### 4.1 Stratum 1 (Dwarfpool Stratum Protocol)
 
 #### 4.1.1 Rationale
 
@@ -487,7 +487,7 @@ On Open Ethereum Pool's Stratum server, invalid share submissions return a messa
 ```
 
 
-### 4.2 Stratum 2.0 (NiceHash Stratum Protocol)
+### 4.2 Stratum 2 (NiceHash Stratum Protocol)
 
 
 #### 4.2.1 Rationale
