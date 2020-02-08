@@ -1,4 +1,20 @@
-# Pantheon GPU Miner Research Documentation
+---
+author: Edson Ayllon
+category: research
+tags: 
+- Stratum
+- Ethereum Client
+- JSON-RPC
+- mining
+status: distilled
+twitter: https://twitter.com/relativeread
+---
+
+## Research 5-2019
+
+# Pantheon External GPU Miner Research Documentation
+
+Research for adding external GPU miner to an Ethereum Client using JSON-RPC or Stratum.
 
 ## Contents
 
